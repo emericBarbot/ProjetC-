@@ -1,0 +1,29 @@
+C:\Users\bapti\source\repos\TransConnect\TransConnect\bin\Debug\net6.0\TransConnect.exe
+C:\Users\bapti\source\repos\TransConnect\TransConnect\bin\Debug\net6.0\TransConnect.deps.json
+C:\Users\bapti\source\repos\TransConnect\TransConnect\bin\Debug\net6.0\TransConnect.runtimeconfig.json
+C:\Users\bapti\source\repos\TransConnect\TransConnect\bin\Debug\net6.0\TransConnect.dll
+C:\Users\bapti\source\repos\TransConnect\TransConnect\bin\Debug\net6.0\TransConnect.pdb
+C:\Users\bapti\source\repos\TransConnect\TransConnect\obj\Debug\net6.0\TransConnect.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\bapti\source\repos\TransConnect\TransConnect\obj\Debug\net6.0\TransConnect.AssemblyInfoInputs.cache
+C:\Users\bapti\source\repos\TransConnect\TransConnect\obj\Debug\net6.0\TransConnect.AssemblyInfo.cs
+C:\Users\bapti\source\repos\TransConnect\TransConnect\obj\Debug\net6.0\TransConnect.csproj.CoreCompileInputs.cache
+C:\Users\bapti\source\repos\TransConnect\TransConnect\obj\Debug\net6.0\TransConnect.dll
+C:\Users\bapti\source\repos\TransConnect\TransConnect\obj\Debug\net6.0\refint\TransConnect.dll
+C:\Users\bapti\source\repos\TransConnect\TransConnect\obj\Debug\net6.0\TransConnect.pdb
+C:\Users\bapti\source\repos\TransConnect\TransConnect\obj\Debug\net6.0\TransConnect.genruntimeconfig.cache
+C:\Users\bapti\source\repos\TransConnect\TransConnect\obj\Debug\net6.0\ref\TransConnect.dll
+C:\Users\barbot\Desktop\esilv A3\c#\projet\TransConnect\TransConnect\bin\Debug\net6.0\TransConnect.exe
+C:\Users\barbot\Desktop\esilv A3\c#\projet\TransConnect\TransConnect\bin\Debug\net6.0\TransConnect.deps.json
+C:\Users\barbot\Desktop\esilv A3\c#\projet\TransConnect\TransConnect\bin\Debug\net6.0\TransConnect.runtimeconfig.json
+C:\Users\barbot\Desktop\esilv A3\c#\projet\TransConnect\TransConnect\bin\Debug\net6.0\TransConnect.dll
+C:\Users\barbot\Desktop\esilv A3\c#\projet\TransConnect\TransConnect\bin\Debug\net6.0\TransConnect.pdb
+C:\Users\barbot\Desktop\esilv A3\c#\projet\TransConnect\TransConnect\obj\Debug\net6.0\TransConnect.csproj.AssemblyReference.cache
+C:\Users\barbot\Desktop\esilv A3\c#\projet\TransConnect\TransConnect\obj\Debug\net6.0\TransConnect.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\barbot\Desktop\esilv A3\c#\projet\TransConnect\TransConnect\obj\Debug\net6.0\TransConnect.AssemblyInfoInputs.cache
+C:\Users\barbot\Desktop\esilv A3\c#\projet\TransConnect\TransConnect\obj\Debug\net6.0\TransConnect.AssemblyInfo.cs
+C:\Users\barbot\Desktop\esilv A3\c#\projet\TransConnect\TransConnect\obj\Debug\net6.0\TransConnect.csproj.CoreCompileInputs.cache
+C:\Users\barbot\Desktop\esilv A3\c#\projet\TransConnect\TransConnect\obj\Debug\net6.0\TransConnect.dll
+C:\Users\barbot\Desktop\esilv A3\c#\projet\TransConnect\TransConnect\obj\Debug\net6.0\refint\TransConnect.dll
+C:\Users\barbot\Desktop\esilv A3\c#\projet\TransConnect\TransConnect\obj\Debug\net6.0\TransConnect.pdb
+C:\Users\barbot\Desktop\esilv A3\c#\projet\TransConnect\TransConnect\obj\Debug\net6.0\TransConnect.genruntimeconfig.cache
+C:\Users\barbot\Desktop\esilv A3\c#\projet\TransConnect\TransConnect\obj\Debug\net6.0\ref\TransConnect.dll
