@@ -2,6 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 
+
 namespace TransConnect
 {
     [TestClass]
@@ -22,10 +23,30 @@ namespace TransConnect
             Assert.AreEqual(chauffeur2.disponibiliteChauffeur(new DateTime(2020, 1, 2)), true);
 
         }
+
+        [TestMethod]
         public void TestAjoutChauffeur()
         {
 
 
         }
-    }
+
+        [TestMethod]
+        public void TestAttributionTauxHoraireParGrille()
+        {
+
+            DateTime dateEmbauchePlusDeUnAn = DateTime.Now.AddYears(-2);
+            DateTime dateEmbauchePlusDeTroisAns = DateTime.Now.AddYears(-4);
+            DateTime dateEmbauchePlusDeCinqAns = DateTime.Now.AddYears(-6);
+
+            Chauffeur chauffeurPlusDeUnAn = new Chauffeur("Test", "Test", "Test", "Testt", "TeTestom", "Test", DateTime.Now, "Test", 12, dateEmbauchePlusDeUnAn);
+            Chauffeur chauffeurPlusDeTroisAns = new Chauffeur("Test", "Test", "Test", "Testt", "TeTestom", "Test", DateTime.Now, "Test", 12, dateEmbauchePlusDeTroisAns);
+            Chauffeur chauffeurPlusDeCinqAns = new Chauffeur("Test", "Test", "Test", "Testt", "TeTestom", "Test", DateTime.Now, "Test", 12, dateEmbauchePlusDeCinqAns);
+
+            Assert.AreEqual(12.60, chauffeurPlusDeUnAn.AttributionTauxHoraireParGrille(), 0.01);
+            Assert.AreEqual(13.20, chauffeurPlusDeTroisAns.AttributionTauxHoraireParGrille(), 0.01);
+            Assert.AreEqual(14.40, chauffeurPlusDeCinqAns.AttributionTauxHoraireParGrille(), 0.01);
+        }
+
+}
 }
