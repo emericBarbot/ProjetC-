@@ -20,6 +20,16 @@ namespace TransConnect
             manager.Subordonnes.Add(newManager);
             newManager.Manager = manager;
         }
+        internal void AddEmploye(Employe manager, Employe employe)
+        {
+            if(manager == null || employe == null)
+            {
+                Console.WriteLine("Impossible d'ajouter un employé sans manager ou un manager null.");
+                return;
+            }
+            manager.Subordonnes.Add(employe);
+            employe.Manager = manager;
+        }
 
         internal void AfficherOrganigramme()
         {
@@ -38,16 +48,15 @@ namespace TransConnect
                 AfficherRecursif(subordonne, niveau + 1);
             }
         }
-
-        public void SupprimerEmploye(Employe manager)
+        internal void SupprimerEmploye(Employe employe)
         {
-            if (manager == null || manager == Chef)
+            if (employe == null || employe == Chef)
             {
                 Console.WriteLine("Impossible de supprimer le chef de l'organigramme.");
                 return;
             }
 
-            SupprimerEmployeRecursif(Chef, manager);
+            SupprimerEmployeRecursif(Chef, employe);
         }
         private void SupprimerEmployeRecursif(Employe employe, Employe manager)
         {
@@ -91,6 +100,27 @@ namespace TransConnect
             {
                 AffichageOrganigramme(subordinate, level + 1);
             }
+        }
+        internal Employe TrouverUnEmploye(string nom)
+        {
+            return TrouverEmployeRecursif(Chef, nom);
+        }
+        private Employe TrouverEmployeRecursif(Employe employe, string nom)
+        {
+            if (employe == null)
+                return null;
+
+            if (employe.Nom.ToLower() == nom.ToLower())
+                return employe;
+
+            foreach (var subordonne in employe.Subordonnes)
+            {
+                var employeTrouve = TrouverEmployeRecursif(subordonne, nom);
+                if (employeTrouve != null)
+                    return employeTrouve;
+            }
+
+            return null;
         }
     }
 }

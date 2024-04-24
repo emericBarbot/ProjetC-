@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
 
 
 namespace TransConnect
@@ -78,88 +79,250 @@ namespace TransConnect
 
             organigramme.AfficherOrganigramme();
 
-            organigramme.SupprimerEmploye(employe1);
+            //organigramme.SupprimerEmploye(employe1);
 
             organigramme.AfficherOrganigramme();
 
-            // Initialisation des villes
-            InitialisationDistances();
+            Console.ReadKey();
 
-            // Affichage des villes
+            Console.Clear();
+
+
+            // Initialisation des villes
             List<Ville> villes = InitialisationVilles();
-            foreach (Ville ville in villes)
-            {
-                Console.WriteLine(ville);
-            }
+
+            // Création d'un graphe
+            Graphe graphe = new Graphe(villes);
+
+            // Initialisation des arêtes
+            graphe = InitialisationAretes(graphe);
+            
+
 
             // Affichage du graphe
-            Graphe graphe = new Graphe();
-            graphe.AjouterVille(new Ville("Paris", 75));
-            graphe.AjouterVille(new Ville("Lyon", 69));
-            graphe.AjouterVille(new Ville("Marseille", 90));
-            graphe.AjouterVille(new Ville("Toulouse", 89));
-            graphe.AjouterVille(new Ville("Bordeaux", 12));
+            graphe.AfficherGraphe();
 
-            graphe.TrajetPlusCourt(new Ville("Paris", 75), new Ville("Marseille", 90));
-            // Afficher le trajet le plus court
-            foreach (Ville ville in graphe.TrajetPlusCourt(new Ville("Paris", 75), new Ville("Marseille", 90)))
-            {
-                Console.WriteLine(ville);
-            }
+            Console.ReadKey();
+
+            Console.Clear();
+
+            // Interface utilisateur
+            InterfaceUtilisateur(organigramme);
+            
+
+            
         }
-
-        static void InitialisationDistances()
+        static int ConvertirTempsEnminutes(string temps)
         {
-            string file = "C:\\Users\\bapti\\source\\repos\\TransConnect\\Distances.csv";
-
-
-            // Vérifier si le fichier existe
-            if (File.Exists(file))
-            {
-                // Lire toutes les lignes du fichier
-                string[] lines = File.ReadAllLines(file);
-
-                // Parcourir les lignes
-                foreach (string line in lines)
-                {
-                    // Diviser la ligne en colonnes en utilisant une virgule comme séparateur
-                    string[] columns = line.Split(';');
-
-                    // Accéder aux données individuelles dans chaque colonne
-                    string villeDepart = columns[0];
-                    string villeArrivee = columns[1];
-                    int distance = int.Parse(columns[2]);
-                    string duree = columns[3];
-
-                    // Utiliser les données comme nécessaire
-                    Console.WriteLine($"Ville de départ : {villeDepart}, Ville d'arrivée : {villeArrivee}, Distance : {distance}, Durée : {duree}");
-                }
-            }
-            else
-            {
-                Console.WriteLine("Le fichier n'existe pas.");
-            }
+            string[] elements = temps.Split('h');
+            return int.Parse(elements[0]) * 60 + int.Parse(elements[1]);
         }
+
+        // Initialisation des villes depuis csv
+        // Csv de forme : Ville;CodePostal
         static List<Ville> InitialisationVilles()
         {
-            string file = "C:\\Users\\bapti\\source\\repos\\TransConnect\\CPostal.csv";
             List<Ville> villes = new List<Ville>();
-
-            using (var reader = new StreamReader(file))
+            string[] lignes = System.IO.File.ReadAllLines("C:\\Users\\bapti\\source\\repos\\TransConnect\\CPostal.csv");
+            foreach (var ligne in lignes)
             {
-                while (!reader.EndOfStream)
-                {
-                    string line = reader.ReadLine();
-                    
-                    string[] values = line.Split(';');
-
-                    string nom = values[0];
-                    int codePostal = Convert.ToInt32(values[1]);
-
-                    villes.Add(new Ville(nom, codePostal));
-                }
+                string[] elements = ligne.Split(';');
+                villes.Add(new Ville(elements[0], int.Parse(elements[1])));
             }
             return villes;
         }
-    }   
+
+        // Initialisation des arêtes depuis csv
+        // Csv de forme : Ville1;Ville2;Poids_km;Poids_temps
+
+        static Graphe InitialisationAretes(Graphe graphe)
+        {
+            string[] lignes = System.IO.File.ReadAllLines("C:\\Users\\bapti\\source\\repos\\TransConnect\\Distances.csv");
+            foreach (var ligne in lignes)
+            {
+                string[] elements = ligne.Split(';');
+                Ville ville1 = graphe.Villes.Find(v => v.Nom == elements[0]);
+                Ville ville2 = graphe.Villes.Find(v => v.Nom == elements[1]);
+                int poids_km = int.Parse(elements[2]);
+                int poids_temps = ConvertirTempsEnminutes(elements[3]);
+                graphe.AjouterArete(ville1, ville2, poids_km, poids_temps);
+            }
+            return graphe;
+        }
+
+        // Calcul du plus court chemin entre deux villes
+        static void PlusCourtChemin(Graphe graphe, Ville depart, Ville arrivee)
+        {
+            Dictionary<Ville, int> distances = new Dictionary<Ville, int>();
+            Dictionary<Ville, Ville> predecesseurs = new Dictionary<Ville, Ville>();
+            List<Ville> villesNonVisitees = new List<Ville>();
+
+            foreach (var v in graphe.Villes)
+            {
+                distances[v] = int.MaxValue;
+                predecesseurs[v] = null;
+                villesNonVisitees.Add(v);
+            }
+
+            distances[depart] = 0;
+
+            while (villesNonVisitees.Count > 0)
+            {
+                Ville villeCourante = villesNonVisitees.OrderBy(v => distances[v]).First();
+                villesNonVisitees.Remove(villeCourante);
+
+                foreach (var voisin in villeCourante.Voisins)
+                {
+                    if (villesNonVisitees.Contains(voisin.Destination))
+                    {
+                        int distance = distances[villeCourante] + voisin.Poids_km;
+                        if (distance < distances[voisin.Destination])
+                        {
+                            distances[voisin.Destination] = distance;
+                            predecesseurs[voisin.Destination] = villeCourante;
+                        }
+                    }
+                }
+            }
+
+            Ville ville = arrivee;
+            List<Ville> chemin = new List<Ville>();
+            while (ville != null)
+            {
+                chemin.Add(ville);
+                ville = predecesseurs[ville];
+            }
+            chemin.Reverse();
+            Console.WriteLine($"Plus court chemin entre {depart} et {arrivee} :");
+            foreach (var v in chemin)
+            {
+                Console.WriteLine(v);
+            }
+        }
+
+        // Calcul du plus rapide chemin entre deux villes
+        static void PlusRapideChemin(Graphe graphe, Ville depart, Ville arrivee)
+        {
+            Dictionary<Ville, int> temps = new Dictionary<Ville, int>();
+            Dictionary<Ville, Ville> predecesseurs = new Dictionary<Ville, Ville>();
+            List<Ville> villesNonVisitees = new List<Ville>();
+
+            foreach (var v in graphe.Villes)
+            {
+                temps[v] = int.MaxValue;
+                predecesseurs[v] = null;
+                villesNonVisitees.Add(v);
+            }
+
+            temps[depart] = 0;
+
+            while (villesNonVisitees.Count > 0)
+            {
+                Ville villeCourante = villesNonVisitees.OrderBy(v => temps[v]).First();
+                villesNonVisitees.Remove(villeCourante);
+
+                foreach (var voisin in villeCourante.Voisins)
+                {
+                    if (villesNonVisitees.Contains(voisin.Destination))
+                    {
+                        int tempsTrajet = temps[villeCourante] + voisin.Poids_temps;
+                        if (tempsTrajet < temps[voisin.Destination])
+                        {
+                            temps[voisin.Destination] = tempsTrajet;
+                            predecesseurs[voisin.Destination] = villeCourante;
+                        }
+                    }
+                }
+            }
+
+            Ville ville = arrivee;
+            List<Ville> chemin = new List<Ville>();
+            while (ville != null)
+            {
+                chemin.Add(ville);
+                ville = predecesseurs[ville];
+            }
+            chemin.Reverse();
+            Console.WriteLine($"Plus rapide chemin entre {depart} et {arrivee} :");
+            foreach (var v in chemin)
+            {
+                Console.WriteLine(v);
+            }
+        }
+
+        // Création d'une interface utilisateur permettant de gérer les employés
+        static void InterfaceUtilisateur(Organigramme organigramme)
+        {
+            Console.WriteLine("Bienvenue dans l'interface de gestion des employés");
+            Console.WriteLine("1 - Afficher l'organigramme");
+            Console.WriteLine("2 - Ajouter un employé");
+            Console.WriteLine("3 - Supprimer un employé");
+            Console.WriteLine("4 - Quitter");
+
+            string choix = Console.ReadLine();
+            switch (choix)
+            {
+                case "1":
+                    organigramme.AfficherOrganigramme();
+                    break;
+                case "2":
+                    Console.WriteLine("Nom : ");
+                    string nom = Console.ReadLine().Trim();
+                    Console.WriteLine("Prénom : ");
+                    string prenom = Console.ReadLine().Trim();
+                    Console.WriteLine("Numéro de sécurité sociale : ");
+                    string numeroSS = Console.ReadLine().Trim();
+                    Console.WriteLine("Adresse postale : ");
+                    string adressePostale = Console.ReadLine().Trim();
+                    Console.WriteLine("Adresse mail : ");
+                    string adresseMail = Console.ReadLine().Trim();
+                    Console.WriteLine("Téléphone : ");
+                    string telephone = Console.ReadLine().Trim();
+                    Console.WriteLine("Date de naissance (format YYYY-MM-DD) : ");
+                    DateTime dateNaissance;
+                    while (!DateTime.TryParse(Console.ReadLine().Trim(), out dateNaissance))
+                    {
+                        Console.WriteLine("Format de date invalide. Veuillez réessayer.");
+                    }
+                    Console.WriteLine("Poste : ");
+                    string poste = Console.ReadLine().Trim();
+                    Console.WriteLine("Salaire : ");
+                    string salaire = Console.ReadLine().Trim();
+                    Console.WriteLine("Date d'embauche (format YYYY-MM-DD) : ");
+                    DateTime dateEmbauche;
+                    while (!DateTime.TryParse(Console.ReadLine().Trim(), out dateEmbauche))
+                    {
+                        Console.WriteLine("Format de date invalide. Veuillez réessayer.");
+                    }
+                    // Afficher les managers disponibles
+                    Console.WriteLine("Managers disponibles : ");
+                    foreach (Employe e in organigramme.Chef.Subordonnes)
+                    {
+                        Console.WriteLine(e.Nom);
+                    }
+                    string nomManager = Console.ReadLine();
+                    Employe manager = organigramme.TrouverUnEmploye(nomManager);
+                    Employe employe = new Employe(nom, prenom, numeroSS, adressePostale, adresseMail, telephone, dateNaissance, poste, salaire, dateEmbauche, new List<Employe>(), manager);
+                    organigramme.AddEmploye(manager, employe);
+                    
+                    break;
+                case "3":
+                    Console.WriteLine("Nom de l'employé à supprimer : ");
+                    string nomEmploye = Console.ReadLine();
+                    Employe asupprimer = organigramme.TrouverUnEmploye(nomEmploye);
+                    // Afficher le si asupprimer est null
+                    if (asupprimer == null)
+                    {
+                        Console.WriteLine("Employé non trouvé");
+                        break;
+                    }
+                    organigramme.SupprimerEmploye(asupprimer);
+                    break;
+                case "4":
+                    return;
+            }
+            InterfaceUtilisateur(organigramme);
+        }
+
+    }
 }
