@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
 
 
 namespace TransConnect
@@ -82,84 +83,60 @@ namespace TransConnect
 
             organigramme.AfficherOrganigramme();
 
-            // Initialisation des villes
-            InitialisationDistances();
 
-            // Affichage des villes
+            // Initialisation des villes
             List<Ville> villes = InitialisationVilles();
-            foreach (Ville ville in villes)
-            {
-                Console.WriteLine(ville);
-            }
+
+            // Création d'un graphe
+            Graphe graphe = new Graphe(villes);
+
+            // Initialisation des arêtes
+            graphe = InitialisationAretes(graphe);
+            
+
 
             // Affichage du graphe
-            Graphe graphe = new Graphe();
-            graphe.AjouterVille(new Ville("Paris", 75));
-            graphe.AjouterVille(new Ville("Lyon", 69));
-            graphe.AjouterVille(new Ville("Marseille", 90));
-            graphe.AjouterVille(new Ville("Toulouse", 89));
-            graphe.AjouterVille(new Ville("Bordeaux", 12));
+            graphe.AfficherGraphe();
+            
 
-            graphe.TrajetPlusCourt(new Ville("Paris", 75), new Ville("Marseille", 90));
-            // Afficher le trajet le plus court
-            foreach (Ville ville in graphe.TrajetPlusCourt(new Ville("Paris", 75), new Ville("Marseille", 90)))
-            {
-                Console.WriteLine(ville);
-            }
+            
         }
-
-        static void InitialisationDistances()
+        static int ConvertirTempsEnminutes(string temps)
         {
-            string file = "C:\\Users\\bapti\\source\\repos\\TransConnect\\Distances.csv";
-
-
-            // Vérifier si le fichier existe
-            if (File.Exists(file))
-            {
-                // Lire toutes les lignes du fichier
-                string[] lines = File.ReadAllLines(file);
-
-                // Parcourir les lignes
-                foreach (string line in lines)
-                {
-                    // Diviser la ligne en colonnes en utilisant une virgule comme séparateur
-                    string[] columns = line.Split(';');
-
-                    // Accéder aux données individuelles dans chaque colonne
-                    string villeDepart = columns[0];
-                    string villeArrivee = columns[1];
-                    int distance = int.Parse(columns[2]);
-                    string duree = columns[3];
-
-                    // Utiliser les données comme nécessaire
-                    Console.WriteLine($"Ville de départ : {villeDepart}, Ville d'arrivée : {villeArrivee}, Distance : {distance}, Durée : {duree}");
-                }
-            }
-            else
-            {
-                Console.WriteLine("Le fichier n'existe pas.");
-            }
+            string[] elements = temps.Split('h');
+            return int.Parse(elements[0]) * 60 + int.Parse(elements[1]);
         }
+
+        // Initialisation des villes depuis csv
+        // Csv de forme : Ville;CodePostal
         static List<Ville> InitialisationVilles()
         {
-            string file = "C:\\Users\\bapti\\source\\repos\\TransConnect\\CPostal.csv";
             List<Ville> villes = new List<Ville>();
-
-            using (var reader = new StreamReader(file))
+            string[] lignes = System.IO.File.ReadAllLines("C:\\Users\\bapti\\source\\repos\\TransConnect\\CPostal.csv");
+            foreach (var ligne in lignes)
             {
-                while (!reader.EndOfStream)
-                {
-                    string line = reader.ReadLine();
-                    
-                    string[] values = line.Split(';');
-
-                    string nom = values[0];
-                    int codePostal = Convert.ToInt32(values[1]);
-
-                    villes.Add(new Ville(nom, codePostal));
-                }
+                string[] elements = ligne.Split(';');
+                villes.Add(new Ville(elements[0], int.Parse(elements[1])));
             }
             return villes;
         }
-    }   
+
+        // Initialisation des arêtes depuis csv
+        // Csv de forme : Ville1;Ville2;Poids_km;Poids_temps
+
+        static Graphe InitialisationAretes(Graphe graphe)
+        {
+            string[] lignes = System.IO.File.ReadAllLines("C:\\Users\\bapti\\source\\repos\\TransConnect\\Distances.csv");
+            foreach (var ligne in lignes)
+            {
+                string[] elements = ligne.Split(';');
+                Ville ville1 = graphe.Villes.Find(v => v.Nom == elements[0]);
+                Ville ville2 = graphe.Villes.Find(v => v.Nom == elements[1]);
+                int poids_km = int.Parse(elements[2]);
+                int poids_temps = ConvertirTempsEnminutes(elements[3]);
+                graphe.AjouterArete(ville1, ville2, poids_km, poids_temps);
+            }
+            return graphe;
+        }
+    }
 }
