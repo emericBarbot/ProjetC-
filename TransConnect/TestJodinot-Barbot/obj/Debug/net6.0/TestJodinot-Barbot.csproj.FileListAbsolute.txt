@@ -1,6 +1,0 @@
-C:\Users\barbot\Desktop\esilv A3\c#\projet\TransConnect\TestJodinot-Barbot\bin\Debug\net6.0\CoverletSourceRootsMapping
-C:\Users\barbot\Desktop\esilv A3\c#\projet\TransConnect\TestJodinot-Barbot\obj\Debug\net6.0\TestJodinot-Barbot.csproj.AssemblyReference.cache
-C:\Users\barbot\Desktop\esilv A3\c#\projet\TransConnect\TestJodinot-Barbot\obj\Debug\net6.0\TestJodinot-Barbot.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\barbot\Desktop\esilv A3\c#\projet\TransConnect\TestJodinot-Barbot\obj\Debug\net6.0\TestJodinot-Barbot.AssemblyInfoInputs.cache
-C:\Users\barbot\Desktop\esilv A3\c#\projet\TransConnect\TestJodinot-Barbot\obj\Debug\net6.0\TestJodinot-Barbot.AssemblyInfo.cs
-C:\Users\barbot\Desktop\esilv A3\c#\projet\TransConnect\TestJodinot-Barbot\obj\Debug\net6.0\TestJodinot-Barbot.csproj.CoreCompileInputs.cache
