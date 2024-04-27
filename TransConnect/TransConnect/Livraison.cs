@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TransConnect
 {
-    public class Livraison
+    internal class Livraison
     {
         Ville villeDepart, villeArrivee;
         DateTime dateDepart, dateArrivee;
@@ -28,6 +28,14 @@ namespace TransConnect
             this.dateArrivee = dateArrivee;
             this.chauffeur = chauffeur;
             this.vehicule = vehicule;
+        }
+        internal decimal Coutlivraison()
+        {
+            return 0;
+        }
+        internal List<Ville> TrajetPlusCourt()
+        {
+            return null;
         }
     }
 }
