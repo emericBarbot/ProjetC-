@@ -10,6 +10,7 @@ namespace TransConnect
     {
         string typeCuve;
 
+
         public CamionCiterne(string marque, string immatriculation, int annee, DateTime dateAchat, DateTime dernierControle, double volume,string matieresTransportes, string typeCuve) : base(marque, immatriculation, annee, dateAchat, dernierControle, volume, matieresTransportes)
         {
             this.typeCuve = typeCuve;

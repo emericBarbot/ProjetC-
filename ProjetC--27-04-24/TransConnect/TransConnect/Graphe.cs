@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TransConnect
 {
-    internal class Graphe
+    public class Graphe
     {
         Dictionary<string, HashSet<Route>> routesDepuisVille = new Dictionary<string, HashSet<Route>>();
 
@@ -94,7 +94,13 @@ namespace TransConnect
             return (distances[villeArrivee], new List<string>());
         }
 
-
+        /// <summary>
+        /// permet de recuperer l'ordre des villes parcourus
+        /// </summary>
+        /// <param name="previous"></param>
+        /// <param name="villeDepart"></param>
+        /// <param name="villeArrivee"></param>
+        /// <returns>liste ordonnées des villes parcourus</returns>
         private List<string> ReconstituerChemin(Dictionary<string, string> previous, string villeDepart, string villeArrivee)
         {
             List<string> chemin = new List<string>();
